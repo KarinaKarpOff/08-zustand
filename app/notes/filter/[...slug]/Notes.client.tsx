@@ -6,8 +6,6 @@ import { fetchNotes } from "@/lib/api";
 import Pagination from "@/components/Pagination/Pagination";
 import NoteList from "@/components/NoteList/NoteList";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import css from "./Notes.module.css";
 
 interface NotesClientProps {
