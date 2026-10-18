@@ -1,12 +1,20 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
-import "modern-normalize/modern-normalize.css";
+import type { Metadata } from "next";
+import { Roboto } from "next/font/google";
+import Providers from "@/components/Provider/Providers";
 import "./globals.css";
 
-export const metadata = {
-  title: "NoteHub",
-  description: "Application for managing personal notes",
+const roboto = Roboto({
+  weight: ["400", "500", "700"],
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-roboto",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "NoteHub - Your Personal Notes",
+  description: "Manage, filter, and create notes seamlessly with NoteHub.",
 };
 
 export default function RootLayout({
@@ -18,13 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <TanStackProvider>
+      <body className={roboto.className}>
+        <Providers>
           <Header />
           {children}
           {modal}
           <Footer />
-        </TanStackProvider>
+        </Providers>
       </body>
     </html>
   );
