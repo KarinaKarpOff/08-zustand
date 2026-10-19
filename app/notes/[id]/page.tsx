@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { fetchNoteById } from "@/lib/api";
+import NoteDetailsClient from "./NoteDetails.client";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -32,4 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: "View note details in NoteHub.",
     };
   }
+}
+export default async function NotePage() {
+  return (
+    <main>
+      <NoteDetailsClient />
+    </main>
+  );
 }
