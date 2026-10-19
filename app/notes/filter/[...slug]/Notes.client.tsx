@@ -57,7 +57,7 @@
 //   );
 // }
 
-("use client");
+"use client";
 
 import { useState, useEffect } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
