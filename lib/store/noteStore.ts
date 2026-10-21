@@ -1,4 +1,3 @@
-// lib/store/noteStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { NoteTag } from "@/types/note";
@@ -21,7 +20,6 @@ const initialDraft: DraftNote = {
   tag: "Todo",
 };
 
-// Використовуємо подвійні дужки create<NoteStore>()((set) => ...) за вимогою завдання
 export const useNoteStore = create<NoteStore>()(
   persist(
     (set) => ({
@@ -34,7 +32,7 @@ export const useNoteStore = create<NoteStore>()(
     }),
     {
       name: "notehub-draft-storage",
-      partialize: (state) => ({ draft: state.draft }), // Зберігаємо лише draft
+      partialize: (state) => ({ draft: state.draft }),
     },
   ),
 );
