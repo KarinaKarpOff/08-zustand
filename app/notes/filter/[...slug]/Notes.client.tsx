@@ -45,7 +45,11 @@ export default function NotesClient({ tag }: NotesClientProps) {
         </Link>
       </div>
 
-      <NoteList notes={data.notes} />
+      {data.notes && data.notes.length > 0 ? (
+        <NoteList notes={data.notes} />
+      ) : (
+        <p>No notes found.</p>
+      )}
 
       <Pagination
         totalPages={data.totalPages}

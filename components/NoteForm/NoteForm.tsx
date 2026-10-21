@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNoteStore } from "@/lib/store/noteStore";
 import { createNote } from "@/lib/api";
 import { NoteTag } from "@/types/note";
@@ -16,6 +16,23 @@ export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
   const { draft, setDraft, clearDraft } = useNoteStore();
 
+  const mutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      clearDraft();
+      queryClient.invalidateQueries({ queryKey: ["notes"] });
+
+      if (onClose) {
+        onClose();
+      } else {
+        router.push("/notes/filter/all");
+      }
+    },
+    onError: (error) => {
+      console.error("Failed to create note:", error);
+    },
+  });
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -25,26 +42,13 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     setDraft({ [name]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await createNote({
-        title: draft.title,
-        content: draft.content,
-        tag: draft.tag as NoteTag,
-      });
-
-      clearDraft();
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
-
-      if (onClose) {
-        onClose();
-      } else {
-        router.push("/notes/filter/all");
-      }
-    } catch (error) {
-      console.error("Failed to create note:", error);
-    }
+    mutation.mutate({
+      title: draft.title,
+      content: draft.content,
+      tag: draft.tag as NoteTag,
+    });
   };
 
   const handleCancel = () => {
@@ -107,8 +111,12 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className={css.submitButton}>
-          Create note +
+        <button
+          type="submit"
+          disabled={mutation.isPending}
+          className={css.submitButton}
+        >
+          {mutation.isPending ? "Creating..." : "Create note +"}
         </button>
       </div>
     </form>
